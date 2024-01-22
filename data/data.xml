@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="pesa" model="instrumento">
+        <field name="name">Pesa</field>
+        <field name="u_medida">Kg</field>
+    </record>
+    <record id="temperatura" model="instrumento">
+        <field name="name">Temperatura</field>
+        <field name="u_medida">grados C</field>
+    </record>
+    <record id="presion" model="instrumento">
+        <field name="name">Presion</field>
+        <field name="u_medida">Atm</field>
+    </record>
+    <record id="otros" model="instrumento">
+        <field name="name">Otros</field>
+        <field name="u_medida">Kg</field>
+    </record>
+</odoo>

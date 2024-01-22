@@ -1,2 +1,2 @@
 # gauge
-ODOO 10 application for the management of measurement tools like manometers, thermometerss, balances
+Measuring tools ODOO 10 application for manometers, thermometers, balances and other.

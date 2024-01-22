@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_gauge_user,gauge_user,gauge.model_gauge,gauge.group_mtto_user,1,0,0,0
+access_gauge_ep,gauge_ep,gauge.model_gauge,gauge.group_mtto_ep,1,1,1,1
+access_gauge_manager,gauge_manager,gauge.model_gauge,gauge.group_mtto_manager,1,1,1,1
+access_instrumento_ep,instrumento_ep,gauge.model_instrumento,gauge.group_mtto_ep,1,1,1,1
+access_instrumento_manager,instrumento_manager,gauge.model_instrumento,gauge.group_mtto_manager,1,1,1,1

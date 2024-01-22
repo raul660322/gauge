@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="equipo_xlsx_report" model="ir.actions.report.xml">
+            <field name="name">equipo_report</field>
+            <field name="type">ir.actions.report.xml</field>
+            <field name="model">gauge</field>
+            <field name="report_name">equipo_xlsx</field>
+            <field name="report_type">xlsx</field>
+            <field name="file">reporte.xlsx</field>
+        </record>
+
+        <record id="report_equipo" model="xlsx_report_base.basic_report_model">
+            <field name="name">Equipos de Medicion</field>
+            <field name="description">Listado de Equipos de Medicion</field>
+            <field name="real_report_id" eval="ref('equipo_xlsx_report')"/>
+            <field name="filter_readonly" eval="True"/>
+            <field name="filter_type">date</field>
+            <field name="modules">Gauges</field>
+        </record>
+
+    </data>
+</odoo>

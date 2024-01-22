@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Top menu item 
+        groups="group_hr_manager,group_hr_user,base.group_user"
+        web_icon="hr,static/description/icon.png" 
+    -->
+    <menuitem
+        id="menu_gauge_root"
+        name="Equipos de Medición"
+        sequence="100" groups="gauge.group_mtto_ep,gauge.group_mtto_manager,gauge.group_mtto_user"/>
+
+    <record model="ir.cron" id="gauge_data_reminder">
+        <field name="name">Vencimiento Certificado Equipo</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model" eval="'gauge'"/>
+        <field name="function" eval="'mail_reminder'"/>
+        <field name="args" eval="'()'" />
+    </record>
+
+    <!-- esto va -->
+   
+    <record model='ir.ui.view' id='gauge_form_view'>
+        <field name="name">gauge.form</field>
+        <field name="model">gauge</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="dpto_ref" string="Unidad"/>
+                            <field name="employee_ref" invisible="0" string="Responsable"/>
+                            <field name="instrumento" string="Equipo"/>
+                            <field name="name" string="Inventario"/>
+                            <field name="serie" string="No. de serie"/>
+                            <field name="marca" string="Marca"/>
+                            <field name="modelo" string="Modelo"/>
+                            <field name="tipo" string="Tipo"/>
+                            <field name="funciona" string="Funciona s/n"/>
+                            <field name="estado" string="Estado"/>
+                            <label for ="rango_ini" string="Rango, inicial, final"/>
+                            <div class="address_format">
+                                <field name="rango_ini" style="width : 40%" />
+                                <field name="rango_fin" style="width : 40%" />
+                                <field name="um_id" style="width : 20%" readonly="1"/>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="tiene_certificado"/>
+                            <field name="certificado"/>
+                            <field name="expiry_date"/>
+                            <field name="mensaje"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Observaciones">
+                            <field name="description"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- <field name="dpto_ref" invisible="not context.get('dpto_visible')" string="Instalación"/> -->
+    <!-- esto va -->
+    <record model='ir.ui.view' id='gauge_tree_view'>
+        <field name="name">gauge.tree</field>
+        <field name="model">gauge</field>
+        <field name="arch" type="xml">
+            <tree string="Equipos de medición" decoration-danger="dias&lt;90">
+                
+                <field name="dpto_ref" string="Instalación"/> 
+                <field name="instrumento"/>               
+                <field name="name" string="Inventario"/>
+                <field name="serie" string="No. de serie"/>
+                <field name="marca" />
+                <field name="modelo" />
+                <field name="tipo"/>
+                <field name="funciona" string="Funciona s/n"/>
+                <field name="estado" string="Estado"/>
+                <field name="certificado"/>
+                <field name="expiry_date"/>
+                <field name="mensaje" invisible="1"/>
+                <field name="dias" string="Dias restantes" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- <record model="ir.ui.view" id="hr_certificado_comercial_inherit_form_view">
+        <field name="name">hr.ccomercial.form.view</field>
+        <field name="model">hr.department</field>
+        <field name="inherit_id" ref="hr.view_department_form"/>
+        <field name="groups_id" eval="[(6, 0, [ref('certificado_comercial.group_operaciones_precios'),ref('certificado_comercial.group_operaciones_manager'),ref('group_operaciones_user')])]"/>
+        <field name="arch" type="xml">
+            <div class="oe_button_box" position="inside">
+                <button class="oe_stat_button" name="document_view" type="object" icon="fa-list-ol" attrs ="{'invisible':[('tipo','!=','venta')]}">
+                    <field string="Certificados" name="document_count" widget="statinfo"/>
+                </button>
+            </div>
+            <group>
+                <field name="tipo"/>
+                <field name="direccion"/>
+            </group>
+            
+            <xpath expr="//field[@name='parent_id']" position="replace">
+                <field name="parent_id" string="Subordinado a:"/>
+            </xpath> 
+        </field>
+    </record> -->
+
+    <!-- Vista para hacer read-only los campos para Operaciones/Precios -->
+
+    <!-- <record model="ir.ui.view" id="certificado_comercial_final_form_view">
+        <field name="name">ccomercial.final.form.view</field>
+        <field name="model">hr.department</field>
+        <field name="inherit_id" ref="certificado_comercial.hr_certificado_comercial_inherit_form_view"/>
+        <field name="groups_id" eval="[(6, 0, [ref('certificado_comercial.group_operaciones_precios')])]"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="replace">
+                <field name="name" attrs="{'readonly':True}" string='Instalacion'/>
+            </xpath>
+            <xpath expr="//field[@name='parent_id']" position="replace">
+                <field name="parent_id" attrs="{'readonly':True}" string='Subordinado a:'/>
+            </xpath>
+            <xpath expr="//field[@name='manager_id']" position="replace">
+                <field name="manager_id" attrs="{'readonly':True}" string='Responsable'/>
+            </xpath>
+            <xpath expr="//field[@name='tipo']" position="replace">
+                <field name="tipo" attrs="{'readonly':True}"/>
+            </xpath>            
+            <xpath expr="//field[@name='active']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="hr_certificado_comercial_inherit_tree_view">
+        <field name="name">hr.ccomercial.dpto.tree.view</field>
+        <field name="model">hr.department</field>
+        <field name="inherit_id" ref="hr.view_department_tree"/>
+        <field name="groups_id" eval="[(6, 0, [ref('certificado_comercial.group_operaciones_precios'),ref('certificado_comercial.group_operaciones_manager'),ref('group_operaciones_user')])]"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='display_name']" position="after">
+                <field name="document_count" string="Cant. de Certificados"/>
+            </xpath> 
+            <xpath expr="//field[@name='parent_id']" position="replace">
+                <field name="parent_id" string="Subordinado a"/>
+            </xpath> 
+        </field>
+    </record> -->
+
+    <record id="dpto_gauge_filter" model="ir.ui.view">
+        <field name="name">dpto.gauge.search</field>
+        <field name="model">hr.department</field>
+        <field name="inherit_id" ref="hr.view_department_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='manager_id']" position="after">
+                <field name="parent_id" string="Subordinado a:"/>
+                <filter name="group_division_id" string="Divisiones" icon="terp-partner" context="{'group_by':'parent_id'}"/>
+                <!-- <filter string="Con Certificados" name="concer" domain="[('document_count','&gt;',0)]"/>
+                <filter string="Sin Certificados" name="sincer" domain="[('document_count','=',0)]"/> -->
+            </xpath> 
+        </field>
+    </record>    
+    
+    <!-- esto va -->
+    
+    <record id="view_gauge_filter" model="ir.ui.view">
+        <field name="name">gauge.search</field>
+        <field name="model">gauge</field>
+        <field name="arch" type="xml">
+            <search string="Equipos de medición">
+                <field name="name"/>
+                <field name="dpto_ref"/>
+                <filter string="Por vencer" name="por_vencer" domain="[('dias','&lt;',90)]"/>
+                <filter string="Vencidos" name="vencidos" domain="[('dias','&lt;',0)]"/>
+
+                <filter string="Pesas" name="vencidos" domain="[('instrumento.name','=','Pesa')]"/>
+                <filter string="Termómetros" name="vencidos" domain="[('instrumento.name','=','Temperatura')]"/>
+                <filter string="Presión" name="vencidos" domain="[('instrumento.name','=','Presion')]"/>
+                <filter string="Otros" name="vencidos" domain="[('instrumento.name','=','Otros')]"/>
+
+                <filter name="group_division" string="División" icon="terp-partner" context="{'group_by':'division_id'}"/>
+                <filter name="group_dpto_ref" string="Departamento" icon="terp-partner" context="{'group_by':'dpto_ref'}"/>
+                <filter name="group_instrumento" string="Equipo" icon="terp-partner" context="{'group_by':'instrumento'}"/>
+                
+            </search>
+        </field>
+    </record>
+
+    <!-- <record model="ir.ui.view" id="hr_employee_ccomercial_inherit_form_view">
+        <field name="name">hr.employee.ccomercial.form.view</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='job_id']" position="after">
+                <field name="es_precios_dpto"/>
+            </xpath>
+        </field>
+    </record> -->
+
+
+
+    <record id="open_view_gauge_list" model="ir.actions.act_window">
+        <field name="name">Equipos de Medición</field>
+        <field name="res_model">gauge</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" eval="False"/>
+        <!-- <field name="search_view_id" ref="view_gauge_filter"/> -->
+        <!-- <field name="context">{'dpto_visible': True}</field> -->
+    </record>  
+
+    <!-- <record id="open_view_ccomercial_dpto" model="ir.actions.act_window">
+        <field name="name">Instalaciones</field>
+        <field name="res_model">hr.department</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" eval="False"/>
+    </record>   -->
+
+    <record id="gauge_report_model_action" model="ir.actions.act_window">
+        <field name="name">Reportes EXCEL</field>
+        <field name="res_model">xlsx_report_base.basic_report_model</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">kanban</field>
+        <field name="domain">[('modules','=','Gauges')]</field>
+        <field name="search_view_id" ref="xlsx_report_base.xlsx_report_base_basic_report_model_search"/>
+    </record>
+
+    <menuitem  id="menu_gauge_main" name="Lista de Equipos" action="open_view_gauge_list" parent="menu_gauge_root" sequence="0" groups="gauge.group_mtto_ep,gauge.group_mtto_manager,gauge.group_mtto_user"/>   
+    <menuitem id="gauge_report_menus" name="Reportes en EXCEL" parent="menu_gauge_root" action="gauge_report_model_action" sequence="120" />
+
+</odoo>
