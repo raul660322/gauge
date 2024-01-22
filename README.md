@@ -1,2 +1,2 @@
 # gauge
-Control de instrumentos de medición tales como termómetros, manómetros, balanzas y otros
+ODOO 10 application for the management of measurement tools like manometers, thermometerss, balances
